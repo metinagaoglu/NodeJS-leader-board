@@ -1,0 +1,11 @@
+version: '3'
+services:
+  backend:
+    build: ./backend/
+    tty: true
+    volumes:
+      - './backend/:/usr/src/app/'
+    ports:
+      - '8080:8080'
+  mongo:
+    image: mongo
