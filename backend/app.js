@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
 const port = 8080
-const db = require('./database/connection');
+const mongoClient = require('./database/mongodb_conn');
+const redisClient = require('./database/redis_conn');
 
 app.get('/', (req, res) => {
 	
