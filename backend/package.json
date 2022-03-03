@@ -4,12 +4,20 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "_moduleAliases": {
+    "@models": "./models",
+    "@database": "./database",
+    "@root": "."
   },
   "author": "Metin Ağaoğlu",
   "license": "MIT",
   "dependencies": {
+    "chance": "^1.1.8",
     "express": "^4.17.3",
+    "module-alias": "^2.2.2",
     "mongoose": "^6.2.4",
     "redis": "^4.0.4"
   }
