@@ -22,4 +22,4 @@ const GamerSchema = new Schema({
 	},
 });
 
-module.exports = GamerSchema;
+module.exports = mongoose.model('gamer', GamerSchema);

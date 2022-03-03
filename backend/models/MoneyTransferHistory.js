@@ -1,13 +1,11 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const {
 	Schema
 } = mongoose;
 
 const MoneyTransferHistory = new Schema({
 	gamerId: { type: Schema.Types.ObjectId, ref: 'Gamer' },
-    from: String,
-    money: Number,
-    timestamps: true
+    money: Number
 });
 
-module.exports = MoneyTransferHistory;
+module.exports = mongoose.model('moneytransfer', MoneyTransferHistory);
