@@ -10,6 +10,10 @@
   "_moduleAliases": {
     "@models": "./models",
     "@database": "./database",
+    "@routes": "./routes",
+    "@services": "./services",
+    "@events": "./events",
+    "@listeners": "./events/listeners",
     "@root": "."
   },
   "author": "Metin Ağaoğlu",
