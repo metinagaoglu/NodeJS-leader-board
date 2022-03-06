@@ -19,6 +19,15 @@ services:
       - '8000:8000'
     depends_on:
       - redis
+  client:
+    build: ./client/
+    tty: true
+    volumes:
+      - './client/:/usr/src/app/'
+    ports:
+      - '3000:8080'
+    depends_on:
+      - websocket
   mongo:
     image: mongo
     tty: true
