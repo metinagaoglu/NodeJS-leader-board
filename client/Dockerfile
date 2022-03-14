@@ -9,9 +9,9 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install -g vue-cli
-#RUN npm install
 
-EXPOSE 8080
+RUN npm install --global http-server
 
-#CMD [ "node", "bin/www" ]
+EXPOSE 3000
+
+CMD [ "http-server", ".", "-p 3000" ]
