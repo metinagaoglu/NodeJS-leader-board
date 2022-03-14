@@ -28,6 +28,11 @@ services:
       - '3000:3000'
     depends_on:
       - websocket
+  game:
+    build: ./game/
+    tty: true
+    volumes:
+      - './game/:/usr/src/app/'
   mongo:
     image: mongo
     tty: true

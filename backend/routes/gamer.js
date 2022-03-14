@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const GamerService = require('@services/gamer_service');
 
 const redisClient = require('@database/redis_conn');
 const Gamer = require('@models/Gamer');
@@ -11,12 +12,23 @@ router.get('/count', async(req,res) => {
 })
 
 router.get('/', async(req, res) => {
-	const gamers = await Gamer.find().limit(10).skip(1).exec();
+	const gamers = await Gamer.find().limit(10).skip(3).exec();
 	res.json(gamers);
 })
 
-router.post('/adding/money', async(req, res) => {
-	// action..
+
+router.get('/adding/money/random', async(req, res) => {
+	let random = Math.floor(Math.random() * 1000);
+	let randomMoney = Math.floor(Math.random() * 100);
+
+	let randomGamer = await Gamer.findOne().skip(random).exec();
+
+	await GamerService.addingMoney(randomGamer._id,randomMoney);
+	res.json({
+		status: true,
+		money: randomMoney,
+		gamer: randomGamer
+	});
 })
 
 router.get('/leaderboard', async(req, res) => {

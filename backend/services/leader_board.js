@@ -1,9 +1,10 @@
 const redisClient = require('@database/redis_conn');
+const { io } = require("socket.io-client");
 
 async function syncLeaderBoard(gamer,money_amount) {
 
 	// Set redis weekly sort set
-	let weekNumber = getNumberOfWeek();
+	const weekNumber = getNumberOfWeek();
 	redisClient.zIncrBy(`weekly_leaderboard_${weekNumber}`, 
 		money_amount,
 		JSON.stringify([
@@ -18,15 +19,16 @@ async function syncLeaderBoard(gamer,money_amount) {
 	if( isExists ) {
 
 		await redisClient.incrBy(weekly_key,money_amount);
-		const amount = await redisClient.get(weekly_key);
 	} else {
+
 		redisClient.set(weekly_key,0);
-		console.log("A new week started.")
-		//TODO: emit event for this
+		eventEmitter.emit('finish.week',{
+			finish_week_number: weekNumber
+		});
 	}
 
+	dispatchLeaderBoard();
 
-	//TODO: Redis publish
 }
 
 function getNumberOfWeek() {
@@ -36,6 +38,55 @@ function getNumberOfWeek() {
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 }
 
+async function fethScoreBoard(limit = 100) {
+	/*
+	const leaderboard = await redisClient.zRange(`weekly_leaderboard_${weekNumber}`, '100', '0' ,{
+		BY: 'SCORE',
+		REV: true,
+		LIMIT: {
+			offset: 0,
+			count: 10
+		}
+	});
+	*/
+	const weekNumber = getNumberOfWeek();
+	/**
+	 * https://redis.io/commands/zrange
+	 *  ZRANGE key min max [BYSCORE|BYLEX] [REV] [LIMIT offset count] [WITHSCORES] 
+	 */
+	const leaderboard = await redisClient.sendCommand(['ZRANGE', `weekly_leaderboard_${weekNumber}`, '+inf', '0', 'BYSCORE', 'REV', 'LIMIT', '0', limit, 'WITHSCORES']);
+
+	// Combine it with scores
+	let leaderboard_with_scores = leaderboard.reduce(function (a, c, i) {
+		var idx = i / 2 | 0;
+		if (i % 2) {
+			a[idx].score = c;
+		} else {
+			a[idx] = {
+				content: JSON.parse(c)
+			};
+		}
+
+		return a;
+	}, []);
+
+	return leaderboard_with_scores;
+}
+
+/**
+ * Publish new leaderbord to the socket.io
+ */
+async function dispatchLeaderBoard() {
+	const socketio_url = process.env.SOCKETIO_CONN_STRING || 'ws://websocket:8000/publish';
+
+	const socket = await io(socketio_url);
+
+	const leaderboard = await fethScoreBoard(100);
+	socket.emit('on.change.leaderboard', leaderboard);
+}
+
 module.exports = {
-	syncLeaderBoard
+	syncLeaderBoard,
+	fethScoreBoard,
+	dispatchLeaderBoard
 };
