@@ -30,7 +30,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd 
+  cd NodeJS-leader-board
 ```
 
 ```bash
@@ -49,6 +49,7 @@ To run tests, run the following command
 ## Architecture
 
 
+![App Architecture](https://github.com/metinagaoglu/NodeJS-leader-board/images/artitechure.png?raw=true)
 
 ## Commit-style
 
