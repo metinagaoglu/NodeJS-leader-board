@@ -49,7 +49,7 @@ To run tests, run the following command
 ## Architecture
 
 
-![App Architecture](https://github.com/metinagaoglu/NodeJS-leader-board/images/artitechure.png?raw=true)
+![App Architecture](https://github.com/metinagaoglu/NodeJS-leader-board/blob/main/images/artitechure.png?raw=true)
 
 ## Commit-style
 
