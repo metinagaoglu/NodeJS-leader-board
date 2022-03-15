@@ -8,19 +8,10 @@ This project simulates a weekly leaderboard scenario for a game where players ch
 
 **Server:** NodeJS(express) - Socket.io
 
-**Database:** MongoDB - Redis
+**Database:** MongoDB - Redis(Pub/Sub/ Sorted set)
 
 
-## Run Locally (manually)
-
-Clone the project
-
-```bash
-  git clone https://github.com/metinagaoglu/NodeJS-leader-board
-```
-
-
-## Run Locally (automatic with docker composer)
+## Run Locally (automatic with docker compose)
 
 
 ```bash
@@ -34,7 +25,7 @@ Go to the project directory
 ```
 
 ```bash
-  docker-composer up
+  docker-compose up
 ```
 
 ## Running Tests
@@ -53,4 +44,5 @@ To run tests, run the following command
 
 ## Commit-style
 
-I've applied the commit style guideline of the teknasyon in the commits in this project
+I've applied the commit style guideline of the teknasyon in the commits in this project.
+[Teknasyon Git Commits Style Guidelines](https://github.com/Teknasyon-Teknoloji/git-commits-style)
