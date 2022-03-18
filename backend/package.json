@@ -21,6 +21,7 @@
   "dependencies": {
     "chance": "^1.1.8",
     "express": "^4.17.3",
+    "helmet": "^5.0.2",
     "module-alias": "^2.2.2",
     "mongoose": "^6.2.4",
     "redis": "^4.0.4",
