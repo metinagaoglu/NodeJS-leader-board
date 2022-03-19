@@ -14,9 +14,13 @@ app.use(helmet.noSniff());
 app.use(helmet.permittedCrossDomainPolicies());
 
 /**
- * DB connections
+ * Import module alias
  */
 require('module-alias/register');
+
+/**
+ * DB connections
+ */
 require('@database/mongodb_conn');
 
 /**
@@ -33,6 +37,19 @@ const leaderboardRouter = require('@routes/leader_board');
 app.use('/gamers',gamerRouter);
 app.use('/leaderboard',leaderboardRouter);
 
+/**
+ * Express error handler middleware
+ */
+app.use((error, req, res, next) => {
+	console.log("error: "+error);
+
+	console.log("Error Handling Middleware called")
+	console.log('Path: ', req.path)
+
+	res.statusCode = 500;
+	res.setHeader('Content-Type', 'text/plain');
+})
+
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+	console.log(`Example app listening on port ${port}`)
 })

@@ -17,13 +17,18 @@ router.get('/', async(req, res) => {
 })
 
 
-router.get('/adding/money/random', async(req, res) => {
+router.get('/adding/money/random', async (req, res, next) => {
 	let random = Math.floor(Math.random() * 1000);
 	let randomMoney = Math.floor(Math.random() * 100);
 
 	let randomGamer = await Gamer.findOne().skip(random).exec();
 
-	await GamerService.addingMoney(randomGamer._id,randomMoney);
+	try {
+		await GamerService.addingMoney(randomGamer._id,randomMoney);
+	} catch(e) {
+		next(e);
+	}
+
 	res.json({
 		status: true,
 		money: randomMoney,
