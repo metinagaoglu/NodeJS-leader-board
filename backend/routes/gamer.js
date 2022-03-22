@@ -19,6 +19,7 @@ router.get('/count', asyncHandler(async (req, res) => {
 router.get('/', asyncHandler(async (req, res) => {
 
 	const gamers = await Gamer.find().limit(10).skip(3).exec();
+	res.status(200);
 	res.json(gamers);
 }))
 
@@ -32,6 +33,7 @@ router.get('/adding/money/random', asyncHandler(async (req, res) => {
 
 	await GamerService.addingMoney(randomGamer._id, randomMoney);
 
+	res.status(201);
 	res.json({
 		status: true,
 		money: randomMoney,
@@ -42,6 +44,7 @@ router.get('/adding/money/random', asyncHandler(async (req, res) => {
 router.get('/leaderboard', asyncHandler(async (req, res) => {
 
 	const gamers = await redisClient.zange('weekly_leaderboard_10', 0, 100, 'withscores');
+	res.status(200);
 	res.send(gamers);
 }))
 
