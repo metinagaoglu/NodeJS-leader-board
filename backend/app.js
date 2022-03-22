@@ -40,14 +40,11 @@ app.use('/leaderboard',leaderboardRouter);
 /**
  * Express error handler middleware
  */
-app.use((error, req, res, next) => {
-	console.log("error: "+error);
-
-	console.log("Error Handling Middleware called")
-	console.log('Path: ', req.path)
-
-	res.statusCode = 500;
-	res.setHeader('Content-Type', 'text/plain');
+app.use((err, req, res, next) => {
+	//TODO: log
+	res.status(500).send({
+		...err
+	})
 })
 
 app.listen(port, () => {

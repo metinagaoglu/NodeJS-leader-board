@@ -4,41 +4,45 @@ const GamerService = require('@services/gamer_service');
 
 const redisClient = require('@database/redis_conn');
 const Gamer = require('@models/Gamer');
+const asyncHandler = require('express-async-handler')
 
-router.get('/count', async(req,res) => {
-	const count = await Gamer.count({ type: 'jungle' });
-	console.log('Count:'+count);
-	res.send(count);
-})
+router.get('/count', asyncHandler(async (req, res) => {
 
-router.get('/', async(req, res) => {
+	const count = await Gamer.count({
+		type: 'jungle'
+	});
+
+	res.status(200);
+	res.json({count});
+}))
+
+router.get('/', asyncHandler(async (req, res) => {
+
 	const gamers = await Gamer.find().limit(10).skip(3).exec();
 	res.json(gamers);
-})
+}))
 
 
-router.get('/adding/money/random', async (req, res, next) => {
+router.get('/adding/money/random', asyncHandler(async (req, res) => {
+
 	let random = Math.floor(Math.random() * 1000);
 	let randomMoney = Math.floor(Math.random() * 100);
 
 	let randomGamer = await Gamer.findOne().skip(random).exec();
 
-	try {
-		await GamerService.addingMoney(randomGamer._id,randomMoney);
-	} catch(e) {
-		next(e);
-	}
+	await GamerService.addingMoney(randomGamer._id, randomMoney);
 
 	res.json({
 		status: true,
 		money: randomMoney,
 		gamer: randomGamer
 	});
-})
+}))
 
-router.get('/leaderboard', async(req, res) => {
-	const gamers = await redisClient.zRange('weekly_leaderboard_10',0,100,'withscores');
+router.get('/leaderboard', asyncHandler(async (req, res) => {
+
+	const gamers = await redisClient.zange('weekly_leaderboard_10', 0, 100, 'withscores');
 	res.send(gamers);
-})
+}))
 
 module.exports = router;
