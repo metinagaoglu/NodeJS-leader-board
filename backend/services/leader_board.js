@@ -1,4 +1,5 @@
 const redisClient = require('@database/redis_conn');
+const eventEmitter = require("@events/event_emitter");
 const { io } = require("socket.io-client");
 
 async function syncLeaderBoard(gamer,money_amount) {
@@ -77,12 +78,9 @@ async function fethScoreBoard(limit = 100) {
  * Publish new leaderbord to the socket.io
  */
 async function dispatchLeaderBoard() {
-	const socketio_url = process.env.SOCKETIO_CONN_STRING || 'ws://websocket:8000/publish';
-
-	const socket = await io(socketio_url);
 
 	const leaderboard = await fethScoreBoard(100);
-	socket.emit('on.change.leaderboard', leaderboard);
+	eventEmitter.emit('on.change.leaderboard', leaderboard);
 }
 
 module.exports = {

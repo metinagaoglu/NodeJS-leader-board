@@ -13,6 +13,12 @@ app.use(helmet.hidePoweredBy());
 app.use(helmet.noSniff());
 app.use(helmet.permittedCrossDomainPolicies());
 
+app.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+});
+
 /**
  * Import module alias
  */
@@ -27,6 +33,7 @@ require('@database/mongodb_conn');
  * Listeners
  */
 require('@listeners/on_adding_money');
+require('@listeners/on_change_leaderboard');
 
 /**
  * Routers
@@ -41,6 +48,7 @@ app.use('/leaderboard',leaderboardRouter);
  * Express error handler middleware
  */
 app.use((err, req, res, next) => {
+	console.log(err);
 	//TODO: log
 	res.status(500).send({
 		...err

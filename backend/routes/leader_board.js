@@ -13,23 +13,37 @@ router.get('/', asyncHandler(async (req, res) => {
 }))
 
 
+router.get('/polling', asyncHandler(async (req, res) => {
+	res.setHeader("Content-Type","application/json; charset=utf-8")
+
+	const eventName = 'on.change.leaderboard';
+
+	eventEmitter.on(eventName, async(event) => {
+
+		const leaderboard = await LeaderboardService.fethScoreBoard();
+		res.write(JSON.stringify(leaderboard));
+		res.end();
+	});
+
+	setTimeout(() => {
+			res.end();
+	}, 10000);
+}))
+
 router.get('/stream', (req, res) => {
 	res.setHeader("Content-Type","application/json; charset=utf-8")
 	res.setHeader("Transfer-Encoding","chunked")
 
-	const id = 'added.money.to.user';
+	const eventName = 'on.change.leaderboard';
 
-	eventEmitter.on(id, async(event) => {
+	eventEmitter.on(eventName, async(event) => {
 
-		const leaderboard = await LeaderboardService.fethScoreBoard();
-		res.write(JSON.stringify(leaderboard));
-		//res.write(JSON.stringify(event));
+		res.write(JSON.stringify(event));
 	});
 
 	setTimeout(() => {
-			console.log("timer");
 			res.end();
-	}, 5000);
+	}, 10000);
 });
 
 router.get('/dispatch', asyncHandler(async (req, res) => {
