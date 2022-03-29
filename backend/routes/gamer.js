@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const GamerService = require('@services/gamer_service');
-const { fethScoreBoard } = require('@services/leader_board');
 
 const redisClient = require('@database/redis_conn');
 const Gamer = require('@models/Gamer');
@@ -82,13 +81,6 @@ router.get('/adding/money/random', asyncHandler(async (req, res) => {
 		money: randomMoney,
 		gamer: randomGamer
 	});
-}))
-
-router.get('/leaderboard', asyncHandler(async (req, res) => {
-
-	const gamers = await fethScoreBoard();
-	res.status(200);
-	res.send(gamers);
 }))
 
 module.exports = router;
