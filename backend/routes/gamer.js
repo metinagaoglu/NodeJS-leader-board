@@ -7,6 +7,21 @@ const redisClient = require('@database/redis_conn');
 const Gamer = require('@models/Gamer');
 const asyncHandler = require('express-async-handler');
 
+
+/**
+ * @swagger
+ * /gamers/count:
+ *   get:
+ *     summary: Returns count of gamers
+ *     tags: [Gamers]
+ *     responses:
+ *       200:
+ *         description: the count of the gamers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ */
 router.get('/count', asyncHandler(async (req, res) => {
 
 	const count = await Gamer.count({
@@ -17,6 +32,20 @@ router.get('/count', asyncHandler(async (req, res) => {
 	res.json({count});
 }))
 
+/**
+ * @swagger
+ * /gamers:
+ *   get:
+ *     summary: Returns all gamers
+ *     tags: [Gamers]
+ *     responses:
+ *       200:
+ *         description: Returns all gamers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ */
 router.get('/', asyncHandler(async (req, res) => {
 
 	const gamers = await Gamer.find().limit(10).skip(3).exec();
@@ -24,7 +53,20 @@ router.get('/', asyncHandler(async (req, res) => {
 	res.json(gamers);
 }))
 
-
+/**
+ * @swagger
+ * /gamers/adding/money/random:
+ *   get:
+ *     summary: Adds money to random gamer
+ *     tags: [Gamers]
+ *     responses:
+ *       201:
+ *         description: A random one of the gamers in the game adds a random amount of money  his account.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ */
 router.get('/adding/money/random', asyncHandler(async (req, res) => {
 
 	let random = Math.floor(Math.random() * 1000);

@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 8080
 const helmet = require('helmet')
+const swaggerUI = require('swagger-ui-express');
 
 /**
  * Helmet functions
@@ -34,6 +35,12 @@ require('@database/mongodb_conn');
  */
 require('@listeners/on_adding_money');
 require('@listeners/on_change_leaderboard');
+
+/**
+ * Swagger documentation initialize
+ */
+const specs = require('@docs/initSwagger');
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 /**
  * Routers
