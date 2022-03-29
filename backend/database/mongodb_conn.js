@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
+const config = require('@config/index');
 
 main().catch(err => console.log(err));
 
-//TODO: get this parameter from enviroment variable.
 async function main() {
-	await mongoose.connect('mongodb://mongo:27017/samplegame');
+	await mongoose.connect(config.mongo.connectionString);
 }
 
 module.exports =() => {

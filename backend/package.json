@@ -15,12 +15,14 @@
     "@events": "./events",
     "@listeners": "./events/listeners",
     "@docs": "./docs",
+    "@config": "./config",
     "@root": "."
   },
   "author": "Metin Ağaoğlu",
   "license": "MIT",
   "dependencies": {
     "chance": "^1.1.8",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-async-handler": "^1.2.0",
     "helmet": "^5.0.2",

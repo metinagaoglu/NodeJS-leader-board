@@ -1,14 +1,16 @@
 const { createClient } = require('redis');
+const config = require('@config/index');
 
-//TODO: get this parameter from enviroment variable.
 const client = createClient({
 	socket: {
-		'host': 'redis',
-		'port': 6379
+		'host': config.redis.host,
+		'port': config.redis.port,
 	}
 });
 
-client.on('error', (err) => console.log('Redis Client Error', err));
+client.on('error', (err) => {
+	throw new Error(err);
+});
 
 client.connect();
 
