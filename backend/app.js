@@ -33,8 +33,7 @@ require('@database/mongodb_conn');
 /**
  * Listeners
  */
-require('@listeners/on_adding_money');
-require('@listeners/on_change_leaderboard');
+require('@listeners/index');
 
 /**
  * Swagger documentation initialize
