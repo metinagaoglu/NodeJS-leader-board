@@ -2,7 +2,7 @@ require('dotenv').config(); // this loads the defined variables from .env
 
 const config = {
     env: process.env.NODE_ENV || 'development',
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 8080,
     mongo: {
         connectionString: process.env.MONGO_CONNECTION_STRING || 'mongodb://mongo:27017/samplegame',
     },
