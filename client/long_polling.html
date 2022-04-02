@@ -55,12 +55,12 @@
         },
         methods: {
             initialData() {
-                axios.get("http://localhost:8080/leaderboard").then((response) => {
+                axios.get("http://localhost/leaderboard").then((response) => {
                         this.leaderboardlist = response.data;
                 });
             },
             fetchData() {
-                axios.get("http://localhost:8080/leaderboard/polling").then((response) => {
+                axios.get("http://localhost/leaderboard/polling").then((response) => {
                     if(response.data) {
                         this.leaderboardlist = response.data;
                     }
