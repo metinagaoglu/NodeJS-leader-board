@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express()
-const port = 8080
 const helmet = require('helmet')
 const swaggerUI = require('swagger-ui-express');
+const bodyParser = require('body-parser')
+const hpp = require('hpp');
 
 /**
  * Helmet functions
@@ -35,6 +36,9 @@ require('@database/mongodb_conn');
  */
 require('@listeners/index');
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
 /**
  * Swagger documentation initialize
  */
@@ -49,6 +53,11 @@ const leaderboardRouter = require('@routes/leader_board');
 
 app.use('/gamers',gamerRouter);
 app.use('/leaderboard',leaderboardRouter);
+
+/**
+ * Express middleware to protect against HTTP Parameter Pollution attacks
+ */
+app.use(hpp());
 
 /**
  * Express error handler middleware
