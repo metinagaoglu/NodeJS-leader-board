@@ -17,11 +17,4 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 	io.listen(port);
 
 	require('./namespaces/index');
-
-
-	//Root namescape
-	io.on('connection', (socket) => {
-
-	});
-
 });
