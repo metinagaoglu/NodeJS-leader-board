@@ -1,14 +1,28 @@
 const express = require('express');
 const app = express();
 const http = require('http');
+const config =  require('./config/index');
 
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 
-const io = new Server(server,{
+
+// Production
+let options = {
 	cors: {
-		credentials: true
+		origin: config.host,
 	}
-});
+};
+
+if(config.env == 'development') {
+	options = {
+		cors: {
+			origin: '*',
+			credentials: true
+		}
+	};
+}
+
+const io = new Server(server,options);
 
 module.exports = io;
