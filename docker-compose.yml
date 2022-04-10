@@ -22,13 +22,19 @@ services:
     depends_on:
       - mongo
       - redis
+  socketioproxy:
+    image: nginx
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx/socket.io/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - websocket
   websocket:
     build: ./websocket/
     tty: true
     volumes:
       - './websocket/:/usr/src/app/'
-    ports:
-      - '8000:8000'
     depends_on:
       - redis
   client:
