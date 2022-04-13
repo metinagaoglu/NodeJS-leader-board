@@ -45,7 +45,8 @@ services:
     ports:
       - '3000:3000'
     depends_on:
-      - websocket
+      - socketioproxy
+      - backendnginx
   game:
     build: ./game/
     tty: true
