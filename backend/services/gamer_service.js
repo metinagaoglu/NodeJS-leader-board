@@ -1,6 +1,7 @@
 const MoneyTransferHistory = require('@models/MoneyTransferHistory');
 const Gamer = require('@models/Gamer');
 const eventEmitter = require('@events/event_emitter');
+const logger = require('../logger/index');
 
 
 async function addingMoney(userId, money_amount) {
@@ -34,8 +35,10 @@ async function addingMoney(userId, money_amount) {
             money: money_amount
         })
 
+        logger.log('[addingMoney]', `added.money.to.user: ${gamer}`);
     } catch(e) {
         //TODO: error log
+        logger.log('[addingMoney]', `error: ${e}`);
         console.log(e);
         return;
     }

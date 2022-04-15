@@ -63,8 +63,7 @@ app.use(hpp());
  * Express error handler middleware
  */
 app.use((err, req, res, next) => {
-	console.log(err);
-	//TODO: log
+	logger.error(err);
 	res.status(500).send({
 		...err
 	})

@@ -3,10 +3,10 @@ services:
   backendnginx:
     image: nginx
     ports:
-      - 80:80
+      - '80:80'
     volumes:
-      - /var/log/nginx:/var/log/nginx
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - '/var/log/nginx:/var/log/nginx'
+      - './nginx/nginx.conf:/etc/nginx/nginx.conf'
     depends_on:
       - backend
   backend:
@@ -25,9 +25,9 @@ services:
   socketioproxy:
     image: nginx
     ports:
-      - 8000:80
+      - '8000:80'
     volumes:
-      - ./nginx/socket.io/nginx.conf:/etc/nginx/nginx.conf
+      - './nginx/socket.io/nginx.conf:/etc/nginx/nginx.conf'
     depends_on:
       - websocket
   websocket:
@@ -54,7 +54,52 @@ services:
       - './game/:/usr/src/app/'
   mongo:
     image: mongo
-    tty: true
+
+  mongograylog:
+    image: mongo
   redis:
     image: redis
     tty: true
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      #- node.max_local_storage_nodes=4
+    ports:
+     - 9200:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+  # Graylog: https://hub.docker.com/r/graylog/graylog/
+  graylog:
+      image: graylog/graylog:4.2
+      environment:
+        # CHANGE ME (must be at least 16 characters)!
+        - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
+        # Password: admin
+        - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+        - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9000/
+      entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
+      restart: always
+      depends_on:
+        - mongograylog
+        - elasticsearch
+      ports:
+        # Graylog web interface and REST API
+        - 9000:9000
+        # Syslog TCP
+        - 1514:1514
+        # Syslog UDP
+        - 1514:1514/udp
+        # GELF TCP
+        - 12201:12201
+        # GELF UDP
+        - 12201:12201/udp
+

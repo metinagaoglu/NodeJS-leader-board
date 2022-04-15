@@ -1,8 +1,10 @@
 const redisClient = require('@database/redis_conn');
 const eventEmitter = require("@events/event_emitter");
 const { io } = require("socket.io-client");
+const logger = require('../logger/index');
 
 async function syncLeaderBoard(gamer,money_amount) {
+	logger.log('[syncLeaderBoard]', `syncLeaderBoard: ${gamer}`);
 
 	// Set redis weekly sort set
 	const weekNumber = getNumberOfWeek();
@@ -21,6 +23,7 @@ async function syncLeaderBoard(gamer,money_amount) {
 
 		await redisClient.incrBy(weekly_key,money_amount);
 	} else {
+		logger.log('[syncLeaderBoard]', `finish.week: ${weekly_key}`);
 
 		redisClient.set(weekly_key,0);
 		eventEmitter.emit('finish.week',{
@@ -71,6 +74,7 @@ async function fethScoreBoard(limit = 100) {
 		return a;
 	}, []);
 
+	logger.log('[fethScoreBoard]', `week: ${weekNumber}`);
 	return leaderboard_with_scores;
 }
 
@@ -78,6 +82,7 @@ async function fethScoreBoard(limit = 100) {
  * Publish new leaderbord to the socket.io
  */
 async function dispatchLeaderBoard() {
+	logger.log('[dispatchLeaderBoard]','It dispatch leaderboard for all agents');
 
 	const leaderboard = await fethScoreBoard(100);
 	eventEmitter.emit('on.change.leaderboard', leaderboard);
