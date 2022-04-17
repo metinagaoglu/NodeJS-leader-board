@@ -4,6 +4,14 @@ const helmet = require('helmet')
 const swaggerUI = require('swagger-ui-express');
 const bodyParser = require('body-parser')
 const hpp = require('hpp');
+const responseTime = require('response-time')
+
+app.use(responseTime((req, res, time) => {
+	const stat = (req.method + req.url).toLowerCase()
+		.replace(/[:.]/g, '')
+		.replace(/\//g, '_')
+	logger.notice(`[responseTime] ${stat}:`, `${time}`)
+}))
 
 /**
  * Helmet functions
@@ -50,6 +58,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
  */
 const gamerRouter = require('@routes/gamer');
 const leaderboardRouter = require('@routes/leader_board');
+const logger = require('./logger');
 
 app.use('/gamers',gamerRouter);
 app.use('/leaderboard',leaderboardRouter);
@@ -63,7 +72,7 @@ app.use(hpp());
  * Express error handler middleware
  */
 app.use((err, req, res, next) => {
-	logger.error(err);
+	logger.error("[error]",err.stack);
 	res.status(500).send({
 		...err
 	})
