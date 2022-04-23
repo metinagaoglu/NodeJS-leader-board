@@ -23,7 +23,7 @@ app.use(helmet.hidePoweredBy());
 app.use(helmet.noSniff());
 app.use(helmet.permittedCrossDomainPolicies());
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
@@ -56,12 +56,12 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 /**
  * Routers
  */
-const gamerRouter = require('@routes/gamer');
-const leaderboardRouter = require('@routes/leader_board');
+const gamerRoute = require('@routes/gamerRoute');
+const leaderboardRoute = require('@routes/leaderboardRoute');
 const logger = require('./logger');
 
-app.use('/gamers',gamerRouter);
-app.use('/leaderboard',leaderboardRouter);
+app.use('/gamers',gamerRoute);
+app.use('/leaderboard',leaderboardRoute);
 
 /**
  * Express middleware to protect against HTTP Parameter Pollution attacks

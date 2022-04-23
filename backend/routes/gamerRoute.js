@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const GamerService = require('@services/gamer_service');
+const gamerService = require('@services/gamerService');
 
 const redisClient = require('@database/redis_conn');
 const Gamer = require('@models/Gamer');
@@ -73,7 +73,7 @@ router.get('/adding/money/random', asyncHandler(async (req, res) => {
 
 	let randomGamer = await Gamer.findOne().skip(random).exec();
 
-	await GamerService.addingMoney(randomGamer._id, randomMoney);
+	await gamerService.addingMoney(randomGamer._id, randomMoney);
 
 	res.status(201);
 	res.json({

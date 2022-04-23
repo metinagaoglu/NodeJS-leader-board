@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const LeaderboardService = require('@services/leader_board');
+const leaderboardService = require('@services/leaderboardService');
 const asyncHandler = require('express-async-handler')
 const eventEmitter = require('@events/event_emitter');
 
@@ -22,7 +22,7 @@ const eventEmitter = require('@events/event_emitter');
  */
 router.get('/', asyncHandler(async (req, res) => {
 
-	const leaderboard = await LeaderboardService.fethScoreBoard();
+	const leaderboard = await leaderboardService.fethScoreBoard();
 	res.status(200);
 	res.json(leaderboard);
 }))
@@ -48,7 +48,7 @@ router.get('/polling', asyncHandler(async (req, res) => {
 
 	eventEmitter.on(eventName, async(event) => {
 
-		const leaderboard = await LeaderboardService.fethScoreBoard();
+		const leaderboard = await leaderboardService.fethScoreBoard();
 		res.write(JSON.stringify(leaderboard));
 		res.end();
 	});
@@ -91,7 +91,7 @@ router.get('/stream', (req, res) => {
  */
 router.get('/dispatch', asyncHandler(async (req, res) => {
 
-	LeaderboardService.dispatchLeaderBoard();
+	leaderboardService.dispatchLeaderBoard();
 	res.status(200);
 	res.json({
 		status: true
